@@ -6,7 +6,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///todo.db"
 db = SQLAlchemy(app)
 
-# ✅ Defining schema 
+#  Defining schema 
 class Todo(db.Model):
     sno = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
@@ -21,14 +21,18 @@ def hello_world():
     todo = Todo(title = "First tod" , desc = "Start investing in the Stock market")
     db.session.add(todo)
     db.session.commit()
-    return render_template('index.html')
+    allTodo = Todo.query.all()
+    print(allTodo)
+    return render_template('index.html' , allTodo = allTodo)
 
-@app.route("/products")
+@app.route("/show")
 def product():
+    allTodo = Todo.query.all()
+    print(allTodo)
     return 'this is a product page'
 
 if __name__ == "__main__":
     with app.app_context():
-        print("✅ Running db.create_all()")
+        print("Running db.create_all()")
         db.create_all()
     app.run(debug=True)
